@@ -71,7 +71,7 @@ func main() {
 	query.Add("q",q)
 	req.URL.RawQuery = query.Encode()
 
-	// Request
+    // Request
     resp, err := client.Do(req)
     defer resp.Body.Close()
     body, err := ioutil.ReadAll(resp.Body)
@@ -96,7 +96,7 @@ func main() {
 
 	// Ws
 	wfs := transRst.Basic.Wfs
-	if len(wfs) > 0 {
+    if len(wfs) > 0 {
 		for _,wfOut := range wfs {
 			name := wfOut.Wf.Name
 			value := wfOut.Wf.Value
