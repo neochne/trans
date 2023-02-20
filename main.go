@@ -46,30 +46,30 @@ type ydWf struct {
 }
 
 func main() {
-	// Create http client
-	client := &http.Client{}
-	req, err := http.NewRequest("GET",BASE_URL,nil)
-	if err != nil {
-		panic(err)
-	}
+    // Create http client
+    client := &http.Client{}
+    req, err := http.NewRequest("GET",BASE_URL,nil)
+    if err != nil {
+    	panic(err)
+    }
 
-	// Get and calc param
-	q := os.Args[1]
-	toStr := getTo(q)
-	curTime := strconv.FormatInt(time.Now().Unix(),10)
-	sign := generateSign(q,curTime)
+    // Get and calc param
+    q := os.Args[1]
+    toStr := getTo(q)
+    curTime := strconv.FormatInt(time.Now().Unix(),10)
+    sign := generateSign(q,curTime)
 
-	// Add query params
-	query := req.URL.Query()
-	query.Add("appKey",APP_ID)
-	query.Add("signType",SIGN_TYPE)
-	query.Add("from",FROM)
-	query.Add("to",toStr)
-	query.Add("salt",SALT)
-	query.Add("curtime",curTime)
-	query.Add("sign",sign)
-	query.Add("q",q)
-	req.URL.RawQuery = query.Encode()
+    // Add query params
+    query := req.URL.Query()
+    query.Add("appKey",APP_ID)
+    query.Add("signType",SIGN_TYPE)
+    query.Add("from",FROM)
+    query.Add("to",toStr)
+    query.Add("salt",SALT)
+    query.Add("curtime",curTime)
+    query.Add("sign",sign)
+    query.Add("q",q)
+    req.URL.RawQuery = query.Encode()
 
     // Request
     resp, err := client.Do(req)
@@ -79,51 +79,51 @@ func main() {
         fmt.Println(err)
     }
 
-	// Parse response
-	// bodyStr := string(body)
-	// fmt.Println(bodyStr)
-	var transRst ydTransRst
-	errUnmarshal := json.Unmarshal(body, &transRst)
+    // Parse response
+    // bodyStr := string(body)
+    // fmt.Println(bodyStr)
+    var transRst ydTransRst
+    errUnmarshal := json.Unmarshal(body, &transRst)
     if errUnmarshal != nil {
          fmt.Println(errUnmarshal)
     }
 
-	// Phonetic
-	fmt.Println()
-	fmt.Printf(" %s  音 [ %s ] 英 [ %s ]  美 [ %s ]",q,transRst.Basic.Phonetic,transRst.Basic.UkPhonetic,transRst.Basic.UsPhonetic)
-	fmt.Println()
-	fmt.Println()
+    // Phonetic
+    fmt.Println()
+    fmt.Printf(" %s  音 [ %s ] 英 [ %s ]  美 [ %s ]",q,transRst.Basic.Phonetic,transRst.Basic.UkPhonetic,transRst.Basic.UsPhonetic)
+    fmt.Println()
+    fmt.Println()
 
 	// Ws
-	wfs := transRst.Basic.Wfs
+    wfs := transRst.Basic.Wfs
     if len(wfs) > 0 {
-		for _,wfOut := range wfs {
-			name := wfOut.Wf.Name
-			value := wfOut.Wf.Value
-			nameLen := utf8.RuneCountInString(name)
-			w := 0
-			if nameLen == 2 {
-				w = 10
-			} else if nameLen == 3{
-				w = 9
-			} else if nameLen == 4 {
-				w = 8
-			}else if nameLen == 5 {
-				w = 7
-			}else if nameLen == 6 {
-				w = 6
-			}
-			fmt.Printf(" %-" + strconv.Itoa(w) + "s : %s\n", name, value)
-		}
-		fmt.Println()
-		fmt.Println()
+        for _,wfOut := range wfs {
+            name := wfOut.Wf.Name
+            value := wfOut.Wf.Value
+            nameLen := utf8.RuneCountInString(name)
+            w := 0
+            if nameLen == 2 {
+            	w = 10
+            } else if nameLen == 3{
+            	w = 9
+            } else if nameLen == 4 {
+            	w = 8
+            }else if nameLen == 5 {
+            	w = 7
+            }else if nameLen == 6 {
+                w = 6
+            }
+            fmt.Printf(" %-" + strconv.Itoa(w) + "s : %s\n", name, value)
+        }
+    	fmt.Println()
+    	fmt.Println()
     }
 
 	// Explains
-	for _,explain := range transRst.Basic.Explains {
-		fmt.Println(" - " + explain)
-	}
-	fmt.Println()
+    for _,explain := range transRst.Basic.Explains {
+        fmt.Println(" - " + explain)
+    }
+    fmt.Println()
 }
 
 func getTo(q string) string{
