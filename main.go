@@ -79,14 +79,14 @@ func main() {
         	fmt.Println(err)
         }
 
-         // Parse response
-         // bodyStr := string(body)
-         // fmt.Println(bodyStr)
-         var transRst ydTransRst
-         errUnmarshal := json.Unmarshal(body, &transRst)
-         if errUnmarshal != nil {
-         	fmt.Println(errUnmarshal)
-         }
+        // Parse response
+        // bodyStr := string(body)
+        // fmt.Println(bodyStr)
+        var transRst ydTransRst
+        errUnmarshal := json.Unmarshal(body, &transRst)
+        if errUnmarshal != nil {
+        	fmt.Println(errUnmarshal)
+        }
 
         // Phonetic
         fmt.Println()
@@ -94,7 +94,7 @@ func main() {
         fmt.Println()
         fmt.Println()
 
-	    // Ws
+        // Ws
         wfs := transRst.Basic.Wfs
         if len(wfs) > 0 {
         	for _, wfOut := range wfs {
