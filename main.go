@@ -15,34 +15,34 @@ import (
 )
 
 const (
-	APP_ID = "4c67797e6790510c"
-	APP_KEY = "OJDxTKImnx15Ld6bOo0Zy0e1rEZ4nYqT"
-	BASE_URL = "https://openapi.youdao.com/api"
-	SALT = "1x2r6y68"
-	FROM = "auto"
-	SIGN_TYPE = "v3"
+    APP_ID = "4c67797e6790510c"
+    APP_KEY = "OJDxTKImnx15Ld6bOo0Zy0e1rEZ4nYqT"
+    BASE_URL = "https://openapi.youdao.com/api"
+    SALT = "1x2r6y68"
+    FROM = "auto"
+    SIGN_TYPE = "v3"
 )
 
 // 字段名起始字母必须是大写，否则外部访问不了，即会解析不到值
 type ydTransRst struct {
-	Basic ydBasic
+    Basic ydBasic
 }
 
 type ydBasic struct {
-	Phonetic string
-	UkPhonetic string `json:"uk-phonetic"`
-	UsPhonetic string `json:"us-phonetic"`
-	Explains []string
-	Wfs []ydWfOut
+    Phonetic string
+    UkPhonetic string `json:"uk-phonetic"`
+    UsPhonetic string `json:"us-phonetic"`
+    Explains []string
+    Wfs []ydWfOut
 }
 
 type ydWfOut struct {
-	Wf ydWf
+    Wf ydWf
 }
 
 type ydWf struct {
-	Name string
-	Value string
+    Name string
+    Value string
 }
 
 func main() {
@@ -119,7 +119,7 @@ func main() {
     	fmt.Println()
     }
 
-	// Explains
+    // Explains
     for _,explain := range transRst.Basic.Explains {
         fmt.Println(" - " + explain)
     }
@@ -127,24 +127,24 @@ func main() {
 }
 
 func getTo(q string) string{
-	if strings.Contains("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",q) {
-		return "zh-CHS"
-	} else {
-		return "en"
-	}
+    if strings.Contains("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",q) {
+        return "zh-CHS"
+    } else {
+        return "en"
+    }
 }
 
 func generateSign(q string,curTime string) string{
-	input := ""
-	qLen := utf8.RuneCountInString(q)
-	if qLen < 20 {
-		input = q
-	} else {
-		input = q[:10] + string(qLen) + q[20:qLen]
-	}	
-	oriSign := APP_ID + input + SALT + curTime + APP_KEY
-	h := sha256.New()
-	h.Write([]byte(oriSign))
-	x := hex.EncodeToString(h.Sum(nil))
-	return x
+    input := ""
+    qLen := utf8.RuneCountInString(q)
+    if qLen < 20 {
+        input = q
+    } else {
+        input = q[:10] + string(qLen) + q[20:qLen]
+    }	
+    oriSign := APP_ID + input + SALT + curTime + APP_KEY
+    h := sha256.New()
+    h.Write([]byte(oriSign))
+    x := hex.EncodeToString(h.Sum(nil))
+    return x
 }
