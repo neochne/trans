@@ -21,7 +21,7 @@ const (
 	baseURL  = "https://openapi.youdao.com/api"
 	salt     = "1x2r6y68"
 	from     = "auto"
-	signType = "v3"
+        signType = "v3"
 )
 
 // 字段名起始字母必须是大写，否则外部访问不了，即会解析不到值
@@ -59,7 +59,7 @@ func main() {
 
 //export TransByYd
 func TransByYd(q string) string {
-	if strings.Compare("", q) == 0 {
+        if strings.Compare("", q) == 0 {
 		errMsg := "Please input a word for translate"
 		printErr("Params Error", errors.New(errMsg))
 		return errMsg
