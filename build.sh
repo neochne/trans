@@ -1,12 +1,12 @@
 print_opts() {
-  echo "options:"
-  echo "    darwin:   Build exec file for mac"
-  echo "    linux:    Build exec file for linux"
-  exit 1
+    echo "options:"
+    echo "    darwin:   Build exec file for mac"
+    echo "    linux:    Build exec file for linux"
+    exit 1
 }
 
 if [ $# -le 0 ]; then
-  print_opts
+    print_opts
 fi
 
 if [ $1 == darwin ]; then
