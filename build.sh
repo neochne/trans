@@ -2,6 +2,7 @@ print_opts() {
     echo "options:"
     echo "    darwin:   Build exec file for mac"
     echo "    linux:    Build exec file for linux"
+    echo "    windows:  Build exec file for windows"
     exit 1
 }
 
@@ -13,6 +14,8 @@ if [ $1 == darwin ]; then
     GOOS='darwin' go build -o ./bin/darwin/trs
 elif [ $1 == linux ]; then
     GOOS='linux' go build -o ./bin/linux/trs
+elif [ $1 == windows ]; then
+    GOOS='windows' go build -o ./bin/windows/trs.exe
 # 不能编译 net、os 等包到 so 文件中
 # elif [ $1 == android ]; then
 #     CGO_ENABLED=1 \

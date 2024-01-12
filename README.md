@@ -1,8 +1,20 @@
 ### Trans
 
-Trans is an translate tool use in terminal,now support mac and linux
+Terminal translate tool for mac,linux and windows
+
+### Use
+
+```shell
+# translate single word
+trs hello
+
+# translate statement
+trs 'hello world'
+```
 
 ### Build
+
+You can build self or use executable file directly in bin/ dir
 
 ```shell
 # For mac
@@ -10,4 +22,7 @@ Trans is an translate tool use in terminal,now support mac and linux
 
 # For linux
 ./build.sh linux
+
+# For windows
+./build.sh windows
 ```
