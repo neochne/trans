@@ -1,5 +1,3 @@
-### Trans
-
 Terminal translate tool for mac,linux and windows
 
 ### Use
