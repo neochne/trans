@@ -13,7 +13,12 @@ import (
 	"strings"
 	"time"
 	"unicode/utf8"
+	"regexp"
 )
+
+// https://ai.youdao.com/DOCSIRMA/html/trans/api/wbfy/index.html
+// user: 15803
+// pass: .....
 
 const (
 	appID    = "4c67797e6790510c"
@@ -29,6 +34,7 @@ type ydTransRst struct {
 	Basic     ydBasic
 	Status    int
 	ErrorCode string
+	Translation []string
 }
 
 type ydBasic struct {
@@ -88,6 +94,7 @@ func TransByYd(q string) string {
 	query.Add("sign", sign)
 	query.Add("q", q)
 	req.URL.RawQuery = query.Encode()
+	// fmt.Printf("reqUrl: %s\n\n", req.URL);
 
 	// Request
 	resp, err := client.Do(req)
@@ -107,7 +114,7 @@ func TransByYd(q string) string {
 
 	// Parse
 	bodyStr := string(body)
-	// fmt.Println(bodyStr)
+	// fmt.Printf("rspBody: %s\n", bodyStr)
 	var transRst ydTransRst
 	unmarshalErr := json.Unmarshal(body, &transRst)
 	if unmarshalErr != nil {
@@ -125,35 +132,38 @@ func TransByYd(q string) string {
 		return bodyStr
 	}
 
+	// Print query word
+	fmt.Printf("\n %s \n\n", q)
+
 	// Phonetic
-	printPhonetic(q, transRst.Basic)
+	// printPhonetic(q, transRst.Basic)
 
 	// Ws
-	wfs := transRst.Basic.Wfs
-	if len(wfs) > 0 {
-		for _, wfOut := range wfs {
-			name := wfOut.Wf.Name
-			value := wfOut.Wf.Value
-			nameLen := utf8.RuneCountInString(name)
-			w := 0
-			if nameLen == 2 {
-				w = 10
-			} else if nameLen == 3 {
-				w = 9
-			} else if nameLen == 4 {
-				w = 8
-			} else if nameLen == 5 {
-				w = 7
-			} else if nameLen == 6 {
-				w = 6
-			}
-			fmt.Printf(" %-"+strconv.Itoa(w)+"s : %s\n", name, value)
-		}
-		fmt.Println()
-	}
+	// wfs := transRst.Basic.Wfs
+	// if len(wfs) > 0 {
+	// 	for _, wfOut := range wfs {
+	// 		name := wfOut.Wf.Name
+	// 		value := wfOut.Wf.Value
+	// 		nameLen := utf8.RuneCountInString(name)
+	// 		w := 0
+	// 		if nameLen == 2 {
+	// 			w = 10
+	// 		} else if nameLen == 3 {
+	// 			w = 9
+	// 		} else if nameLen == 4 {
+	// 			w = 8
+	// 		} else if nameLen == 5 {
+	// 			w = 7
+	// 		} else if nameLen == 6 {
+	// 			w = 6
+	// 		}
+	// 		fmt.Printf(" %-"+strconv.Itoa(w)+"s : %s\n", name, value)
+	// 	}
+	// 	fmt.Println()
+	// }
 
 	// Explains
-	for _, explain := range transRst.Basic.Explains {
+	for _, explain := range transRst.Translation {
 		fmt.Println(" - " + explain)
 	}
 	fmt.Println()
@@ -164,7 +174,6 @@ func printPhonetic(q string, basic ydBasic) {
 	phonetic := basic.Phonetic
 	ukPhonetic := basic.UkPhonetic
 	usPhonetic := basic.UsPhonetic
-	fmt.Printf("\n %s", q)
 	if strings.Compare("", phonetic) != 0 {
 		fmt.Printf("  音 [ %s ]", phonetic)
 	}
@@ -182,7 +191,7 @@ func printErr(errType string, err error) {
 }
 
 func getTo(q string) string {
-	if strings.Contains("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", q) {
+	if regexp.MustCompile(`^[a-zA-Z]+$`).MatchString(q) {
 		return "zh-CHS"
 	}
 	return "en"

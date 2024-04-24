@@ -11,10 +11,13 @@ if [ $# -le 0 ]; then
 fi
 
 if [ $1 == darwin ]; then
+    rm -fr ./bin/darwin/trs
     GOOS='darwin' go build -o ./bin/darwin/trs
 elif [ $1 == linux ]; then
+    rm -fr ./bin/linux/trs
     GOOS='linux' go build -o ./bin/linux/trs
 elif [ $1 == windows ]; then
+    rm -fr ./bin/windows/trs.exe
     GOOS='windows' go build -o ./bin/windows/trs.exe
 # 不能编译 net、os 等包到 so 文件中
 # elif [ $1 == android ]; then
