@@ -191,7 +191,7 @@ func printErr(errType string, err error) {
 }
 
 func getTo(q string) string {
-	if regexp.MustCompile(`^[a-zA-Z]+$`).MatchString(q) {
+	if regexp.MustCompile(`^[a-z A-Z]+$`).MatchString(q) {
 		return "zh-CHS"
 	}
 	return "en"
